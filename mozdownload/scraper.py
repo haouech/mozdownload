@@ -322,7 +322,7 @@ class Scraper(object):
 
             checksums_file.seek(0)
             result = {}
-            self.logger.info('Checksums binary: {}'.format(self.checksums_binary))
+            self.logger.info('Checksums binary: {}'.format(self.checksums_binary_name))
             for line in checksums_file:
                 try:
                     match = re.search(self.checksums_parse_regex, line)
@@ -388,7 +388,6 @@ class Scraper(object):
                 if self.timeout_download and \
                         t1 >= self.timeout_download:
                     raise errors.TimeoutError
-                
             stream.seek(0)
             hash.update(str(stream.read()))
 
@@ -417,7 +416,7 @@ class Scraper(object):
         self.logger.info('Saving as: %s' % self.filename)
 
         tmp_file = self.filename + ".part"
-        f = open(tmp_file, 'wb')
+        f = open(tmp_file, 'w+b')
         self._retry(self._download, args=(f, self.url),
                     retry_exceptions=(requests.exceptions.RequestException,
                                       errors.TimeoutError))
